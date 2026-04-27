@@ -42,6 +42,7 @@ const els = {
   markerList: document.querySelector("#markerList"),
   addMarkerDialog: document.querySelector("#addMarkerDialog"),
   addMarkerForm: document.querySelector("#addMarkerForm"),
+  cancelAddMarkerButton: document.querySelector("#cancelAddMarkerButton"),
   selectedTextInput: document.querySelector("#selectedTextInput"),
   noteInput: document.querySelector("#noteInput"),
   colorInput: document.querySelector("#colorInput"),
@@ -280,6 +281,9 @@ function setupEvents() {
     els.noteInput.value = "";
     els.colorInput.value = "yellow";
     els.addMarkerDialog.showModal();
+  });
+  els.cancelAddMarkerButton.addEventListener("click", () => {
+    els.addMarkerDialog.close();
   });
 
   els.addMarkerForm.addEventListener("submit", async (event) => {
