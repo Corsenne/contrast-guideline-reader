@@ -233,7 +233,14 @@ select {
 }
 
 #addMarkerForm .primary {
-  margin: 0 12px;
+  margin: 0;
+}
+
+.form-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 0 12px;
 }
 
 .toast {

@@ -1,10 +1,10 @@
-const CACHE_NAME = "contrast-guideline-pwa-v1";
+const CACHE_NAME = "contrast-guideline-pwa-v3";
 const PDFJS_VERSION = "4.10.38";
 const APP_SHELL = [
   "./",
   "index.html",
   "style.css",
-  "app.js",
+  "app.js?v=20260427-3",
   "manifest.webmanifest",
   "assets/books/pdf_chunks/contrast_guideline.pdf.b64.part00",
   "assets/books/pdf_chunks/contrast_guideline.pdf.b64.part01",
@@ -35,6 +35,33 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") {
+    return;
+  }
+
+  if (event.request.mode === "navigate") {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put("index.html", copy));
+          return response;
+        })
+        .catch(() => caches.match("index.html"))
+    );
+    return;
+  }
+
+  const url = new URL(event.request.url);
+  if (url.pathname.endsWith("/app.js") || url.pathname.endsWith("/style.css")) {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+          return response;
+        })
+        .catch(() => caches.match(event.request))
+    );
     return;
   }
 

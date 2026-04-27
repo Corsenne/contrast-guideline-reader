@@ -43,6 +43,7 @@ const els = {
   addMarkerDialog: document.querySelector("#addMarkerDialog"),
   addMarkerForm: document.querySelector("#addMarkerForm"),
   cancelAddMarkerButton: document.querySelector("#cancelAddMarkerButton"),
+  cancelAddMarkerButtonBottom: document.querySelector("#cancelAddMarkerButtonBottom"),
   selectedTextInput: document.querySelector("#selectedTextInput"),
   noteInput: document.querySelector("#noteInput"),
   colorInput: document.querySelector("#colorInput"),
@@ -283,8 +284,15 @@ function setupEvents() {
     els.addMarkerDialog.showModal();
   });
   els.cancelAddMarkerButton.addEventListener("click", () => {
-    els.addMarkerDialog.close();
+    closeAddMarkerDialog();
   });
+  els.cancelAddMarkerButtonBottom.addEventListener("click", closeAddMarkerDialog);
+  els.addMarkerDialog.addEventListener("click", (event) => {
+    if (event.target === els.addMarkerDialog) {
+      closeAddMarkerDialog();
+    }
+  });
+  els.addMarkerDialog.addEventListener("cancel", clearAddMarkerInputs);
 
   els.addMarkerForm.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -308,6 +316,7 @@ function setupEvents() {
       updatedAt: now,
     });
     els.addMarkerDialog.close();
+    clearAddMarkerInputs();
     toast("マーカーを保存しました");
   });
 
@@ -329,12 +338,24 @@ function setupEvents() {
   window.addEventListener("resize", () => goToPage(state.currentPage));
 }
 
+function clearAddMarkerInputs() {
+  els.selectedTextInput.value = "";
+  els.noteInput.value = "";
+  els.colorInput.value = "yellow";
+}
+
+function closeAddMarkerDialog() {
+  clearAddMarkerInputs();
+  els.addMarkerDialog.close();
+}
+
 async function registerServiceWorker() {
   if (!("serviceWorker" in navigator)) {
     return;
   }
   try {
-    await navigator.serviceWorker.register("sw.js");
+    const registration = await navigator.serviceWorker.register("sw.js?v=20260427-3");
+    await registration.update();
   } catch (error) {
     console.warn("Service worker registration failed", error);
   }
