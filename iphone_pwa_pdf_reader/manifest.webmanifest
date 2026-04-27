@@ -1,0 +1,19 @@
+{
+  "name": "造影剤使用に関する院内ガイドライン",
+  "short_name": "造影剤GL",
+  "description": "同梱PDFをオフラインで読めるPWA版PDFリーダー",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f7f4",
+  "theme_color": "#0f766e",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "assets/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
